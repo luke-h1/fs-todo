@@ -28,7 +28,13 @@ const main = async () => {
     done(null, user.accessToken);
   });
 
-  app.use(cors({ origin: '*' })); // TODO: change this when ready for deploy
+  app.use(
+    cors({
+      allowedHeaders: '*',
+      origin: '*',
+    }),
+  );
+
   app.use(passport.initialize());
   app.use(express.json());
 
@@ -71,7 +77,7 @@ const main = async () => {
     '/auth/github/callback',
     passport.authenticate('github', { session: false }),
     (req: any, res) => {
-      res.redirect(`http://localhost:3000/auth/${req.user.accessToken}`);
+      res.redirect(`http://localhost:3000/api/auth/${req.user.accessToken}`);
     },
   );
   //   todo - update a todo
