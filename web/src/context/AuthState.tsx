@@ -25,7 +25,7 @@ export const AuthState = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   const register = async (email, password) => {
-    dispatch({ type: REGISTER_REQUEST })
+    dispatch({ type: REGISTER_REQUEST });
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -35,6 +35,9 @@ export const AuthState = ({ children }: { children: React.ReactNode }) => {
       const { data } = await axios.post(`${API_URL}/api/auth/register`, { email, password }, config);
       if (data.token && data.user) {
         console.log(data.token);
+        console.log(data.user);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('token', data.token);
         dispatch({ type: REGISTER_SUCCESS, payload: data });
       }
     } catch (e) {

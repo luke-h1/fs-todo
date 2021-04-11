@@ -41,11 +41,10 @@ export const authReducer = (state: any, action: any) => {
     }
 
     case REGISTER_SUCCESS: {
-      const { user, token } = action.payload;
       return {
         loading: false,
-        user,
-        token,
+        user: action.payload.user,
+        token: action.payload.token,
       };
     }
   }
