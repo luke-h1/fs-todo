@@ -5,25 +5,14 @@ import { CustomInput } from '../components/CustomInput';
 import { Spinner } from '../components/Spinner';
 import { Wrapper } from '../components/Wrapper';
 import todoContext from '../context/todo/TodoContext';
+import Link from 'next/link';
 
-const Flex = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem 0 1rem 0;
-  width: 1000px;
-`;
 
 export const CreateTodo: React.FC<{}> = () => {
   const TodoContext = useContext(todoContext);
   const {
-    loading, todos, createTodo, getTodos,
+    loading, createTodo,
   } = TodoContext;
-
-  useEffect(() => {
-    getTodos();
-  }, []);
 
   return (
     <Wrapper>
@@ -51,26 +40,6 @@ export const CreateTodo: React.FC<{}> = () => {
           </Form>
         )}
       </Formik>
-      {todos && todos.map((t) => (
-        <Flex key={t.id}>
-          <div className="hover:bg-gray-100 focus:outline-none focus:ring-2 cursor-pointer rounded mb-4 min-w-lg w-full">
-            <div className="border-gray-300 p-5 rounded-md shadow-lg">
-              <h4 className="text-xl font-semibold mb-2 text-left">{t.text}</h4>
-              <p className="text-md font-semibold mb-2 text-left">
-                TODO ID:
-                {t.id}
-              </p>
-              <div className="flex mt-5">
-                <p className="text-left">
-                  CREATOR_ID:
-                  {t.creatorId}
-                </p>
-              </div>
-            </div>
-          </div>
-        </Flex>
-      ))}
-
     </Wrapper>
   );
 };

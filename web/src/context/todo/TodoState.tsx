@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import TodoContext from './TodoContext';
 import { todoReducer } from './todoReducer';
 
@@ -20,6 +21,7 @@ import { isServer } from '../../utils/isServer';
 import { API_URL } from '../../constants/API';
 
 export const TodoState = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
   const initalState = {
     loading: false,
     todos: [],
@@ -39,6 +41,7 @@ export const TodoState = ({ children }: { children: React.ReactNode }) => {
       };
       const { data } = await axios.post(`${API_URL}/api/todo`, { text }, config);
       dispatch({ type: CREATE_TODO_SUCCESS, payload: data });
+      router.push('/todo');
       getTodos();
     } catch (e) {
       console.error('CREATE NOTE ERROR', e);
