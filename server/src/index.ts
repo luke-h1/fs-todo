@@ -6,6 +6,7 @@ import { Strategy as GithubStrategy } from 'passport-github';
 import passport from 'passport';
 import cors from 'cors';
 import { sign, verify } from 'jsonwebtoken';
+import { readFileSync } from 'node:fs';
 import { Todo } from './entities/Todo';
 import { isAuth } from './middleware/isAuth';
 import { User } from './entities/User';
@@ -30,8 +31,8 @@ const main = async () => {
 
   app.use(
     cors({
+      origin: '*',
       credentials: true,
-      origin: 'http://localhost:5000',
     }),
   );
 
@@ -39,51 +40,7 @@ const main = async () => {
     res.header('Access-Control-Allow-Origin', '*');
     next();
   });
-  app.use(passport.initialize());
   app.use(express.json());
-
-  passport.use(
-    new GithubStrategy(
-      {
-        clientID: process.env.GITHUB_CLIENT_ID,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: 'http://localhost:3000/auth/github/callback',
-      },
-      async (_, __, profile, cb) => {
-        let user = await User.findOne({ where: { githubId: profile.id } });
-        if (user) {
-          // user already exists, just update their details
-          user.name = profile.displayName;
-          await user.save();
-        } else {
-          // user doesn't exist. Create a new user
-          user = await User.create({
-            name: profile.displayName,
-            githubId: profile.id,
-          }).save();
-        }
-        cb(null, {
-          accessToken: sign(
-            { userId: user.id },
-            process.env.ACCESS_TOKEN_SECRET,
-            {
-              expiresIn: '1y', // TODO: change this when ready for deploy
-            },
-          ),
-        });
-      },
-    ),
-  );
-
-  app.get('/auth/github', passport.authenticate('github', { session: false }));
-
-  app.get(
-    '/auth/github/callback',
-    passport.authenticate('github', { session: false }),
-    (req: any, res) => {
-      res.redirect(`http://localhost:3000/api/auth/${req.user.accessToken}`);
-    },
-  );
 
   //   todo - update a todo
 
