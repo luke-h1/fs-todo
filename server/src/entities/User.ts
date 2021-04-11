@@ -15,11 +15,14 @@ export class User extends BaseEntity {
   @Column('text', { nullable: true })
   name: string;
 
-  @Column('text', { unique: true})
+  @Column('text', { unique: true })
   email!: string;
 
   @Column('text')
   password!: string;
+
+  @Column('int', { default: 0 })
+  tokenVersion: number;
 
   @OneToMany(() => Todo, (t) => t.creator)
   todos: Promise<Todo[]>;

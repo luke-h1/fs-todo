@@ -1,5 +1,8 @@
 import argon2 from 'argon2';
 import { getConnection } from 'typeorm';
+import { sendRefreshToken } from '../utils/sendRefreshToken';
+import { createRefreshToken } from '../utils/createRefreshToken';
+import { createAccessToken } from '../utils/createAccessToken';
 import { User } from '../entities/User';
 import { validateRegister } from '../utils/validateRegister';
 
@@ -34,10 +37,10 @@ const register = async (req, res) => {
           },
         ],
       });
-      //   generate jwt here...
-      //   TODO: create helpers to generate and remove tokens
-      //   const token = generateToken(user.id);
-      return { user };
+      // log user in after succesfull registration
+      const token = createAccessToken(user);
+      sendRefreshToken(res, createRefreshToken(user));
+      return { user, token };
     }
   }
 };
