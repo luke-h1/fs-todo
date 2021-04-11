@@ -13,6 +13,8 @@ import {
   DELETE_TODO_REQUEST,
   DELETE_TODO_SUCCESS,
   DELETE_TODO_FAIL,
+  GET_TODOS_REQUEST,
+  GET_TODOS_SUCCESS,
 } from '../../constants/TodoConstants';
 import { isServer } from '../../utils/isServer';
 import { API_URL } from '../../constants/API';
@@ -37,10 +39,28 @@ export const TodoState = ({ children }: { children: React.ReactNode }) => {
       };
       const { data } = await axios.post(`${API_URL}/api/todo`, { text }, config);
       dispatch({ type: CREATE_TODO_SUCCESS, payload: data });
+      getTodos();
     } catch (e) {
       console.error('CREATE NOTE ERROR', e);
     }
   };
+
+  const getTodos = async () => {
+    dispatch({ type: GET_TODOS_REQUEST });
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${!isServer() && localStorage.getItem('token')}`,
+        },
+      };
+      const { data } = await axios.get(`${API_URL}/api/todo`, config);
+      dispatch({ type: GET_TODOS_SUCCESS, payload: data });
+    } catch (e) {
+      console.error('CREATE NOTE ERROR', e);
+    }
+  };
+
   return (
     <TodoContext.Provider
       value={{
@@ -48,6 +68,7 @@ export const TodoState = ({ children }: { children: React.ReactNode }) => {
         todos: state.todos,
         todo: state.todo,
         createTodo,
+        getTodos,
       }}
     >
       {children}
