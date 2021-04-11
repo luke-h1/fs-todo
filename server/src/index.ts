@@ -82,7 +82,7 @@ const main = async () => {
     res.send({ todos });
   });
 
-  app.post("/todo", isAuth, async (req , res) => {
+  app.post("/todo", isAuth, async (req, res) => {
     const todo = await Todo.create({
       text: req.body.text,
       creatorId: req.userId,
@@ -102,6 +102,19 @@ const main = async () => {
     todo.completed = !todo.completed;
     await todo.save();
     res.send({ todo });
+  });
+
+  app.delete("/todo", isAuth, async (req, res) => {
+    const todo = await Todo.findOne(req.body.id);
+    if (!todo) {
+      res.send({ todo: null });
+      return;
+    }
+    if (todo.creatorId !== req.userId) {
+      throw new Error("not authorized");
+    }
+    await todo.remove();
+    res.send({ deleted: true });
   });
 
   app.get("/me", async (req, res) => {
