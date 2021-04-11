@@ -7,7 +7,8 @@ import { User } from '../entities/User';
 import { validateRegister } from '../utils/validateRegister';
 
 const register = async (req, res) => {
-  const { email, password }: { email: string; password: string } = req.params;
+  const { email, password }: { email: string; password: string } = req.body;
+  console.log('EMAIL', email, 'PASSWORD', password);
   const errors = validateRegister(email, password);
   if (errors) {
     res.status(400).json({ errors });
@@ -27,6 +28,10 @@ const register = async (req, res) => {
       .execute();
     user = result.raw[0];
     console.log('USER', user);
+    // log user in after succesfull registration
+    const token = createAccessToken(user);
+    sendRefreshToken(res, createRefreshToken(user));
+    res.status(200).json({ user, token })
   } catch (e) {
     if (e.code === '23505') {
       res.status(400).json({
@@ -37,10 +42,6 @@ const register = async (req, res) => {
           },
         ],
       });
-      // log user in after succesfull registration
-      const token = createAccessToken(user);
-      sendRefreshToken(res, createRefreshToken(user));
-      return { user, token };
     }
   }
 };
