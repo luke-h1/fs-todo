@@ -8,6 +8,9 @@ import {
   REGISTER_REQUEST,
   REGISTER_FAIL,
   REGISTER_SUCCESS,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
 } from '../constants/AuthConstants';
 import { isServer } from '../utils/isServer';
 import { API_URL } from '../constants/API';
@@ -33,15 +36,26 @@ export const AuthState = ({ children }: { children: React.ReactNode }) => {
     };
     try {
       const { data } = await axios.post(`${API_URL}/api/auth/register`, { email, password }, config);
-      if (data.token && data.user) {
-        console.log(data.token);
-        console.log(data.user);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        localStorage.setItem('token', data.token);
-        dispatch({ type: REGISTER_SUCCESS, payload: data });
-      }
+      dispatch({ type: REGISTER_SUCCESS, payload: data });
+      router.push('/');
     } catch (e) {
       dispatch({ type: REGISTER_FAIL });
+    }
+  };
+
+  const login = async (email, password) => {
+    dispatch({ type: LOGIN_REQUEST });
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const { data } = await axios.post(`${API_URL}/api/auth/login`, { email, password }, config);
+      dispatch({ type: LOGIN_SUCCESS, payload: data });
+      router.push('/');
+    } catch (e) {
+      dispatch({ type: LOGIN_FAIL });
     }
   };
 
@@ -52,6 +66,7 @@ export const AuthState = ({ children }: { children: React.ReactNode }) => {
         token: state.token,
         user: state.user,
         register,
+        login,
       }}
     >
       {children}

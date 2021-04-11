@@ -6,9 +6,9 @@ import { Wrapper } from '../components/Wrapper';
 import authContext from '../context/authContext';
 import { Spinner } from '../components/Spinner';
 
-export const RegisterPage: React.FC<{}> = () => {
+export const LoginPage: React.FC<{}> = () => {
   const AuthContext = useContext(authContext);
-  const { loading, register } = AuthContext;
+  const { loading, login } = AuthContext;
   const router = useRouter();
 
   return (
@@ -19,7 +19,7 @@ export const RegisterPage: React.FC<{}> = () => {
         initialValues={{ email: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
           const { email, password } = values;
-          await register(email, password);
+          await login(email, password);
         }}
 
       >
@@ -39,7 +39,7 @@ export const RegisterPage: React.FC<{}> = () => {
               type="submit"
               disabled={isSubmitting}
             >
-              Sign Up
+              Login
             </button>
             {loading && <Spinner />}
           </Form>

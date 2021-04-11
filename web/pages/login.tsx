@@ -1,11 +1,10 @@
 import React from 'react';
+import { LoginPage } from '../src/modules/LoginPage';
 
-interface loginProps {
 
-}
-
-export const login: React.FC<loginProps> = ({}) => {
+const login: React.FC<{}> = () => {
   return (
-    <h1>login page</h1>
+    <LoginPage />
   );
 };
+export default login;

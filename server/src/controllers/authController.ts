@@ -73,11 +73,12 @@ const login = async (req, res) => {
         },
       ],
     });
-  }
+  } else {
   // login is successfull
-  const token = createAccessToken(user!);
-  sendRefreshToken(res, createRefreshToken(user!));
-  res.status(200).json({ user, token });
+    const token = createAccessToken(user!);
+    sendRefreshToken(res, createRefreshToken(user!));
+    res.status(200).json({ user, token });
+  }
 };
 
 const logout = async (req, res) => {
