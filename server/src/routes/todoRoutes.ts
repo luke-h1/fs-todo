@@ -1,4 +1,5 @@
 import express from 'express';
+import { isAuth } from '../middleware/isAuth';
 import {
   createTodo,
   deleteTodo,
@@ -8,6 +9,8 @@ import {
 
 const router = express.Router();
 
-router.route('/').get(getTodos).post(createTodo);
+router.route('/').get(isAuth, getTodos).post(isAuth, createTodo);
 
-router.route('/:id').put(updateTodo).delete(deleteTodo);
+router.route('/:id').put(isAuth, updateTodo).delete(isAuth, deleteTodo);
+
+export default router;

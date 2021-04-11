@@ -2,26 +2,26 @@ import 'reflect-metadata';
 import express from 'express';
 import { createConnection } from 'typeorm';
 import { join } from 'path';
-import { Strategy as GithubStrategy } from 'passport-github';
 import passport from 'passport';
 import cors from 'cors';
-import { sign, verify } from 'jsonwebtoken';
-import { readFileSync } from 'node:fs';
-import { Todo } from './entities/Todo';
-import { isAuth } from './middleware/isAuth';
+import { verify } from 'jsonwebtoken';
 import { User } from './entities/User';
 import { __prod__ } from './constants';
+import todoRoutes from './routes/todoRoutes';
+import authRoutes from './routes/authRoutes';
 
 require('dotenv-safe').config();
+
+const { PORT } = process.env;
 
 const main = async () => {
   await createConnection({
     type: 'postgres',
-    database: 'githubTodo',
-    entities: [join(__dirname, './entities/*.*')],
+    url: process.env.DATABASE_URL,
     logging: !__prod__,
+    migrations: [join(__dirname, './migrations/*.*')],
     synchronize: !__prod__,
-    // dropSchema: true,
+    entities: [join(__dirname, './entities/*.*')],
   });
   const app = express();
 
@@ -42,53 +42,9 @@ const main = async () => {
   });
   app.use(express.json());
 
-  //   todo - update a todo
-
+  /* auth stuff - move this stuff into auth controller / auth routes */
   app.get('/auth/:id', async (req, res) => {
     res.send({ accessToken: req.params.id });
-  });
-
-  app.get('/todo', isAuth, async (req, res) => {
-    const todos = await Todo.find({
-      where: { creatorId: req.userId },
-      order: { id: 'DESC' },
-    });
-    res.send({ todos });
-  });
-
-  app.post('/todo', isAuth, async (req, res) => {
-    const todo = await Todo.create({
-      text: req.body.text,
-      creatorId: req.userId,
-    }).save();
-    res.send({ todo });
-  });
-
-  app.put('/todo', isAuth, async (req, res) => {
-    const todo = await Todo.findOne(req.body.id);
-    if (!todo) {
-      res.send({ todo: null });
-      return;
-    }
-    if (todo.creatorId !== req.userId) {
-      throw new Error('not authorized');
-    }
-    todo.completed = !todo.completed;
-    await todo.save();
-    res.send({ todo });
-  });
-
-  app.delete('/todo', isAuth, async (req, res) => {
-    const todo = await Todo.findOne(req.body.id);
-    if (!todo) {
-      res.send({ todo: null });
-      return;
-    }
-    if (todo.creatorId !== req.userId) {
-      throw new Error('not authorized');
-    }
-    await todo.remove();
-    res.send({ deleted: true });
   });
 
   app.get('/me', async (req, res) => {
@@ -119,12 +75,16 @@ const main = async () => {
     res.send({ user });
   });
 
+  app.use('/api/todo', todoRoutes);
+
+  app.use('/api/auth', authRoutes);
+
   app.get('/', (_, res) => {
     res.send('API is running');
   });
 
-  app.listen(3000, () => {
-    console.log('listening on 3000');
+  app.listen(PORT, () => {
+    console.log(`Server listening on ${PORT} 🚀`);
   });
 };
 main().catch((e) => console.error(e));

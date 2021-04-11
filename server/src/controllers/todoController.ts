@@ -1,5 +1,4 @@
-import { Response } from 'express';
-import { Todo } from 'src/entities/Todo';
+import { Todo } from '../entities/Todo';
 
 const getTodos = async (req, res) => {
   const todos = await Todo.find({

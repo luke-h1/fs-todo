@@ -15,8 +15,11 @@ export class User extends BaseEntity {
   @Column('text', { nullable: true })
   name: string;
 
-  @Column('text', { unique: true })
-  githubId: string;
+  @Column('text', { unique: true})
+  email!: string;
+
+  @Column('text')
+  password!: string;
 
   @OneToMany(() => Todo, (t) => t.creator)
   todos: Promise<Todo[]>;
