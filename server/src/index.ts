@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import express from 'express';
 import { createConnection } from 'typeorm';
 import { join } from 'path';
-import passport from 'passport';
 import cors from 'cors';
 import { verify } from 'jsonwebtoken';
 import { User } from './entities/User';
@@ -24,22 +23,12 @@ const main = async () => {
     entities: [join(__dirname, './entities/*.*')],
   });
   const app = express();
-
-  passport.serializeUser((user: any, done) => {
-    done(null, user.accessToken);
-  });
-
   app.use(
     cors({
-      origin: '*',
+      origin: 'http://localhost:3000',
       credentials: true,
     }),
   );
-
-  app.use('*', (_, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-  });
   app.use(express.json());
 
   /* auth stuff - move this stuff into auth controller / auth routes */

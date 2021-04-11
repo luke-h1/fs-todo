@@ -19,8 +19,6 @@
     "dotenv-safe": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "passport": "^0.4.1",
-    "passport-github": "^1.1.0",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.32"
@@ -30,8 +28,6 @@
     "@types/express": "^4.17.11",
     "@types/jsonwebtoken": "^8.5.1",
     "@types/node": "^14.14.37",
-    "@types/passport": "^1.0.6",
-    "@types/passport-github": "^1.1.5",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
     "eslint": "^7.24.0",
