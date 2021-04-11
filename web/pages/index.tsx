@@ -1,9 +1,9 @@
 // import { Navbar } from '../src/components/Navbar';
 
-import { SplashScreen } from '../src/components/SplashScreen';
+import { IndexPage } from '../src/modules/IndexPage';
 
 export default function Home() {
   return (
-    <SplashScreen />
+    <IndexPage />
   );
 }
