@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React, { useContext } from 'react';
-import authContext from '../context/authContext';
+import authContext from '../context/auth/AuthContext';
+import { CreateTodo } from './CreateTodo';
 
 export const IndexPage: React.FC<{}> = () => {
   const AuthContext = useContext(authContext);
@@ -25,7 +26,7 @@ export const IndexPage: React.FC<{}> = () => {
           </Link>
         </div>
       ) : (
-        <h1>you're logged in 😎</h1>
+        <CreateTodo />
       )}
     </>
   );

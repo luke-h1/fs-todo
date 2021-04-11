@@ -3,7 +3,7 @@ import { Formik, Form } from 'formik';
 import { useRouter } from 'next/router';
 import { CustomInput } from '../components/CustomInput';
 import { Wrapper } from '../components/Wrapper';
-import authContext from '../context/authContext';
+import authContext from '../context/auth/AuthContext';
 import { Spinner } from '../components/Spinner';
 
 export const RegisterPage: React.FC<{}> = () => {

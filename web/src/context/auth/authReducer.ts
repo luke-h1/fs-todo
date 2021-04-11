@@ -5,7 +5,7 @@ import {
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
-} from '../constants/AuthConstants';
+} from '../../constants/AuthConstants';
 
 export const authReducer = (state: any, action: any) => {
   switch (action.type) {
