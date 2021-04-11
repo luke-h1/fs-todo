@@ -41,12 +41,19 @@ export const TodoIndex = () => {
                   TODO ID:
                   {t.id}
                 </p>
-                <div className="flex mt-5">
+                <div className="flex mt-5 mb-4 pb-4">
                   <p className="text-left">
                     CREATOR_ID:
                     {t.creatorId}
                   </p>
                 </div>
+                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4" type="button" onClick={() => { }}>
+                  Delete Todo
+                </button>
+                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="button" onClick={() => { }}>
+                  Edit Todo
+                </button>
+
               </div>
             </div>
           </Link>
