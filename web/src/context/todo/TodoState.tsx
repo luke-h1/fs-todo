@@ -64,6 +64,23 @@ export const TodoState = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const deleteTodo = async (id: string) => {
+    dispatch({ type: DELETE_TODO_REQUEST });
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${!isServer() && localStorage.getItem('token')}`,
+        },
+      };
+      const { data } = await axios.delete(`${API_URL}/api/todo/${id}`, config);
+      dispatch({ type: DELETE_TODO_SUCCESS, payload: data });
+      getTodos();
+    } catch (e) {
+      console.error('DELETE NOTE ERROR', e);
+    }
+  };
+
   return (
     <TodoContext.Provider
       value={{
@@ -72,6 +89,7 @@ export const TodoState = ({ children }: { children: React.ReactNode }) => {
         todo: state.todo,
         createTodo,
         getTodos,
+        deleteTodo,
       }}
     >
       {children}
