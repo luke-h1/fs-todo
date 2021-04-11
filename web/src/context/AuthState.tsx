@@ -25,7 +25,7 @@ export const AuthState = ({ children }: { children: React.ReactNode }) => {
   const login = async () => {
     try {
       dispatch({ type: LOGIN_REQUEST });
-      const { data } = await axios.get(`${API_URL}/auth/github`);
+      const { data } = await axios.get('http://localhost:3000/auth/github');
       if (!data.accessToken) {
         console.error('no token');
         dispatch({ type: LOGIN_FAIL });

@@ -31,10 +31,14 @@ const main = async () => {
   app.use(
     cors({
       credentials: true,
-      origin: '*',
+      origin: 'http://localhost:5000',
     }),
   );
 
+  app.use('*', (_, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });
   app.use(passport.initialize());
   app.use(express.json());
 
@@ -77,9 +81,10 @@ const main = async () => {
     '/auth/github/callback',
     passport.authenticate('github', { session: false }),
     (req: any, res) => {
-      res.redirect(`http://localhost:5000/api/auth/${req.user.accessToken}`);
+      res.redirect(`http://localhost:3000/api/auth/${req.user.accessToken}`);
     },
   );
+
   //   todo - update a todo
 
   app.get('/auth/:id', async (req, res) => {
