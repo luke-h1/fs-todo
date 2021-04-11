@@ -6,7 +6,10 @@
   "scripts": {
     "watch": "tsc -w",
     "dev": "nodemon dist/index.js",
-    "gen-types": "npx gen-env-types .env -o src/types/env.d.ts -e ."
+    "gen-types": "npx gen-env-types .env -o src/types/env.d.ts -e .",
+    "lint": "eslint ./src/**/*.ts --fix && eslint ./src/*.ts --fix",
+    "build": "tsc"
+
   },
   "keywords": [],
   "author": "luke-h1",
