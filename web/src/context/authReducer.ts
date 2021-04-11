@@ -2,7 +2,10 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-} from '../constants/AuthConstants';
+  REGISTER_REQUEST,
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
+} from "../constants/AuthConstants";
 
 export const authReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -10,8 +13,8 @@ export const authReducer = (state: any, action: any) => {
       return state;
     }
     case LOGIN_SUCCESS: {
-      const token = action.payload.accesstoken;
-      localStorage.setItem('token', token);
+      const { token } = action.payload;
+      localStorage.setItem("token", token);
       return {
         accessToken: token,
         loading: false,
@@ -19,17 +22,30 @@ export const authReducer = (state: any, action: any) => {
       };
     }
 
+    case REGISTER_REQUEST:
     case LOGIN_REQUEST: {
       return {
-        loading: false,
+        loading: true,
+        user: null,
+        accessToken: null,
       };
     }
 
+    case REGISTER_FAIL:
     case LOGIN_FAIL: {
       return {
         accessToken: null,
         loading: false,
         user: null,
+      };
+    }
+
+    case REGISTER_SUCCESS: {
+      const { user, token } = action.payload;
+      return {
+        loading: false,
+        user,
+        token,
       };
     }
   }

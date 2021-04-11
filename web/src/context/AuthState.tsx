@@ -5,9 +5,9 @@ import AuthContext from './authContext';
 import { authReducer } from './authReducer';
 
 import {
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
+  REGISTER_REQUEST,
+  REGISTER_FAIL,
+  REGISTER_SUCCESS,
 } from '../constants/AuthConstants';
 import { isServer } from '../utils/isServer';
 import { API_URL } from '../constants/API';
@@ -17,23 +17,28 @@ export const AuthState = ({ children }: { children: React.ReactNode }) => {
 
   const initialState = {
     loading: false,
-    accessToken: !isServer() && localStorage.getItem('token'),
+    token: !isServer() && localStorage.getItem('token'),
+    user: null,
+
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  const login = async () => {
+  const register = async (email, password) => {
+    dispatch({ type: REGISTER_REQUEST })
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
     try {
-      dispatch({ type: LOGIN_REQUEST });
-      const { data } = await axios.get('http://localhost:3000/auth/github');
-      if (!data.accessToken) {
-        console.error('no token');
-        dispatch({ type: LOGIN_FAIL });
+      const { data } = await axios.post(`${API_URL}/api/auth/register`, { email, password }, config);
+      if (data.token && data.user) {
+        console.log(data.token);
+        dispatch({ type: REGISTER_SUCCESS, payload: data });
       }
-      dispatch({ type: LOGIN_SUCCESS, payload: data });
     } catch (e) {
-      console.error('no token');
-      dispatch({ type: LOGIN_FAIL });
+      dispatch({ type: REGISTER_FAIL });
     }
   };
 
@@ -41,8 +46,9 @@ export const AuthState = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         loading: state.loading,
-        accessToken: state.accessToken,
-        login,
+        token: state.token,
+        user: state.user,
+        register,
       }}
     >
       {children}

@@ -14,7 +14,6 @@ interface userInfo {
 
 const register = async (req, res) => {
   const { email, password }: userInfo = req.body;
-  console.log('EMAIL', email, 'PASSWORD', password);
   const errors = validateRegister(email, password);
   if (errors) {
     res.status(400).json({ errors });
@@ -33,7 +32,6 @@ const register = async (req, res) => {
       .returning('*')
       .execute();
     user = result.raw[0];
-    console.log('USER', user);
     // log user in after succesfull registration
     const token = createAccessToken(user);
     sendRefreshToken(res, createRefreshToken(user));
@@ -102,4 +100,6 @@ const me = async (req, res) => {
   }
 };
 
-export { register, login, logout, me };
+export {
+  register, login, logout, me,
+};
