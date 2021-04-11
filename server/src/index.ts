@@ -3,8 +3,6 @@ import express from 'express';
 import { createConnection } from 'typeorm';
 import { join } from 'path';
 import cors from 'cors';
-import { verify } from 'jsonwebtoken';
-import { User } from './entities/User';
 import { __prod__ } from './constants';
 import todoRoutes from './routes/todoRoutes';
 import authRoutes from './routes/authRoutes';
@@ -30,39 +28,6 @@ const main = async () => {
     }),
   );
   app.use(express.json());
-
-  /* auth stuff - move this stuff into auth controller / auth routes */
-  app.get('/auth/:id', async (req, res) => {
-    res.send({ accessToken: req.params.id });
-  });
-
-  app.get('/me', async (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      res.send({ user: null });
-      return;
-    }
-    const token = authHeader.split(' ')[1];
-    if (!token) {
-      res.send({ user: null });
-      return;
-    }
-
-    let userId = '';
-    try {
-      const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET);
-      userId = payload.userId;
-    } catch (e) {
-      res.send({ user: null });
-      return;
-    }
-    if (!userId) {
-      res.send({ user: null });
-      return;
-    }
-    const user = await User.findOne(userId);
-    res.send({ user });
-  });
 
   app.use('/api/todo', todoRoutes);
 
