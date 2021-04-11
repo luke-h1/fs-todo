@@ -1,8 +1,11 @@
 import Link from 'next/link';
 import React, { useContext, useEffect } from 'react';
 import styled from '@emotion/styled';
+import { Router } from 'express';
+import { useRouter } from 'next/router';
 import todoContext from '../../context/todo/TodoContext';
 import { Spinner } from '../../components/Spinner';
+import { CustomLink } from '../../components/CustomLink';
 
 const Flex = styled.div`
   display: flex;
@@ -15,6 +18,7 @@ const Flex = styled.div`
 `;
 
 export const TodoIndex = () => {
+  const router = useRouter();
   const TodoContext = useContext(todoContext);
   const {
     loading, todos, getTodos, deleteTodo,
@@ -30,9 +34,8 @@ export const TodoIndex = () => {
 
   return (
     <Flex>
-      <h1>Your Todos</h1>
-      {todos !== null ? todos.map((t) => (
-
+      <h1 className="text-3xl">Your Todos</h1>
+      {todos.length > 0 ? todos.map((t) => (
         <Flex key={t.id}>
           <div className="hover:bg-gray-100 focus:outline-none focus:ring-2 cursor-pointer rounded mb-4 min-w-lg w-full ">
             <Link href={`/todo/${t.id}`}>
@@ -58,6 +61,7 @@ export const TodoIndex = () => {
             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4" type="button" onClick={() => { deleteTodo(t.id); }}>
               Delete Todo
             </button>
+            {/* push to edit todo page, pass in id from router.params... */}
             <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="button" onClick={() => { }}>
               Edit Todo
             </button>
@@ -65,7 +69,12 @@ export const TodoIndex = () => {
 
         </Flex>
       )) : (
-        <h1>no todos to show</h1>
+        <>
+          <h1 className="text-2xl mt-20 mb-4">Looks like you've not created any todos.</h1>
+          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="button" onClick={() => router.push('/')}>
+            Click me to create some !
+          </button>
+        </>
       )}
     </Flex>
   );
