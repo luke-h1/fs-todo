@@ -1,5 +1,6 @@
 import argon2 from 'argon2';
 import { getConnection } from 'typeorm';
+import { verify } from 'jsonwebtoken';
 import { sendRefreshToken } from '../utils/sendRefreshToken';
 import { createRefreshToken } from '../utils/createRefreshToken';
 import { createAccessToken } from '../utils/createAccessToken';
@@ -81,4 +82,24 @@ const login = async (req, res) => {
   res.status(200).json({ user, token });
 };
 
-export { register, login };
+const logout = async (req, res) => {
+  sendRefreshToken(res, '');
+  res.status(200).json({ token: null, user: null });
+};
+
+const me = async (req, res) => {
+  const authorization = req.headers.authorization;
+  if (!authorization) {
+    res.status(400).send({ user: null });
+  }
+  try {
+    const token = authorization.split(' ')[1];
+    const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const user = await User.findOne(payload.user.id);
+    res.status(200).json({ user });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export { register, login, logout, me };
