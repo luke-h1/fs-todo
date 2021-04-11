@@ -30,7 +30,7 @@ const main = async () => {
 
   app.use(
     cors({
-      allowedHeaders: '*',
+      credentials: true,
       origin: '*',
     }),
   );
@@ -77,7 +77,7 @@ const main = async () => {
     '/auth/github/callback',
     passport.authenticate('github', { session: false }),
     (req: any, res) => {
-      res.redirect(`http://localhost:3000/api/auth/${req.user.accessToken}`);
+      res.redirect(`http://localhost:5000/api/auth/${req.user.accessToken}`);
     },
   );
   //   todo - update a todo
