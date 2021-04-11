@@ -73,6 +73,7 @@ const main = async () => {
       res.redirect(`http://localhost:54321/auth/${req.user.accessToken}`);
     }
   );
+  //   todo - update a todo
 
   app.get(`/todo`, isAuth, async (req, res) => {
     const todos = await Todo.find({
