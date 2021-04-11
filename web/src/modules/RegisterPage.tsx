@@ -5,12 +5,11 @@ import { CustomInput } from '../components/CustomInput';
 import { Wrapper } from '../components/Wrapper';
 import authContext from '../context/authContext';
 
-interface registerModuleProps {}
-
-export const RegisterModule: React.FC<registerModuleProps> = () => {
+export const RegisterPage: React.FC<{}> = () => {
   const AuthContext = useContext(authContext);
   const { loading, register } = AuthContext;
   const router = useRouter();
+
   return (
     <Wrapper>
       {loading && <h1>loading</h1>}

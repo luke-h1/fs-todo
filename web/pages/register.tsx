@@ -1,10 +1,10 @@
 import React from 'react';
-import { RegisterModule } from '../src/modules/registerModule';
+import { RegisterPage } from '../src/modules/RegisterPage';
 
-const RegisterPage: React.FC<{}> = () => {
+const register: React.FC<{}> = () => {
   return (
-    <RegisterModule />
+    <RegisterPage />
   );
 };
 
-export default RegisterPage;
+export default register;
