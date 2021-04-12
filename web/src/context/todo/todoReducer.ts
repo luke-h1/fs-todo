@@ -10,7 +10,10 @@ import {
   DELETE_TODO_FAIL,
   GET_TODOS_REQUEST,
   GET_TODOS_SUCCESS,
-} from '../../constants/TodoConstants';
+  GET_SINGLE_TODO_FAIL,
+  GET_SINGLE_TODO_REQUEST,
+  GET_SINGLE_TODO_SUCCESS,
+} from "../../constants/TodoConstants";
 
 export const todoReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -18,12 +21,19 @@ export const todoReducer = (state: any, action: any) => {
       return state;
     }
 
+    case GET_SINGLE_TODO_SUCCESS: {
+      const { todo } = action.payload;
+      return {
+        todo,
+        loading: false,
+      };
+    }
+
     case CREATE_TODO_SUCCESS: {
       const { todos } = action.payload;
       return {
         todos,
         loading: false,
-
       };
     }
 
@@ -35,6 +45,7 @@ export const todoReducer = (state: any, action: any) => {
       };
     }
 
+    case GET_SINGLE_TODO_REQUEST:
     case GET_TODOS_REQUEST:
     case CREATE_TODO_REQUEST:
     case UPDATE_TODO_REQUEST:

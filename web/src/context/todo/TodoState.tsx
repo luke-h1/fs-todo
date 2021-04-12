@@ -16,6 +16,8 @@ import {
   DELETE_TODO_FAIL,
   GET_TODOS_REQUEST,
   GET_TODOS_SUCCESS,
+  GET_SINGLE_TODO_REQUEST,
+  GET_SINGLE_TODO_SUCCESS,
 } from '../../constants/TodoConstants';
 import { isServer } from '../../utils/isServer';
 import { API_URL } from '../../constants/API';
@@ -44,7 +46,7 @@ export const TodoState = ({ children }: { children: React.ReactNode }) => {
       router.push('/todo');
       getTodos();
     } catch (e) {
-      console.error('CREATE NOTE ERROR', e);
+      console.error('CREATE TODO ERROR', e);
     }
   };
 
@@ -60,7 +62,7 @@ export const TodoState = ({ children }: { children: React.ReactNode }) => {
       const { data } = await axios.get(`${API_URL}/api/todo`, config);
       dispatch({ type: GET_TODOS_SUCCESS, payload: data });
     } catch (e) {
-      console.error('CREATE NOTE ERROR', e);
+      console.error('CREATE TODO ERROR', e);
     }
   };
 
@@ -77,7 +79,28 @@ export const TodoState = ({ children }: { children: React.ReactNode }) => {
       dispatch({ type: DELETE_TODO_SUCCESS, payload: data });
       getTodos();
     } catch (e) {
-      console.error('DELETE NOTE ERROR', e);
+      console.error('DELETE TODO ERROR', e);
+    }
+  };
+
+  const getSingleTodo = async (id: number) => {
+    const user = !isServer() && localStorage.getItem('user');
+    // eslint-disable-next-line radix
+    const userId = parseInt(user[6]);
+
+    dispatch({ type: GET_SINGLE_TODO_REQUEST });
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${!isServer() && localStorage.getItem('token')}`,
+        },
+      };
+      const { data } = await axios.post(`${API_URL}/api/todo/${id}`, { userId, id }, config);
+      console.log(data);
+      dispatch({ type: GET_SINGLE_TODO_SUCCESS, payload: data });
+    } catch (e) {
+      console.error('GET SINGLE TODO ERROR');
     }
   };
 
@@ -90,6 +113,7 @@ export const TodoState = ({ children }: { children: React.ReactNode }) => {
         createTodo,
         getTodos,
         deleteTodo,
+        getSingleTodo,
       }}
     >
       {children}

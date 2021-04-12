@@ -3,6 +3,7 @@ import { verify } from 'jsonwebtoken';
 
 export const isAuth: RequestHandler<{}, any, any, {}> = (req, _, next) => {
   const authHeader = req.headers.authorization;
+  console.log('authHeader', authHeader);
   if (!authHeader) {
     throw new Error('not authenticated');
   }
