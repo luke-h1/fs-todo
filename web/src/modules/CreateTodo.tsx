@@ -5,7 +5,6 @@ import { CustomInput } from '../components/CustomInput';
 import { Spinner } from '../components/Spinner';
 import { Wrapper } from '../components/Wrapper';
 import todoContext from '../context/todo/TodoContext';
-import Link from 'next/link';
 
 
 export const CreateTodo: React.FC<{}> = () => {

@@ -35,6 +35,14 @@ export const TodoIndex = () => {
   return (
     <Flex>
       <h1 className="text-3xl">Your Todos</h1>
+      <div className="flex flex-col align-center items-center mt-4 mx-0">
+        <Link href="/">
+          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-4" type="button">
+            Create todo
+          </button>
+        </Link>
+      </div>
+
       {todos.length > 0 ? todos.map((t) => (
         <Flex key={t.id}>
           <div className="hover:bg-gray-100 focus:outline-none focus:ring-2 cursor-pointer rounded mb-4 min-w-lg w-full ">
@@ -62,7 +70,7 @@ export const TodoIndex = () => {
               Delete Todo
             </button>
             {/* push to edit todo page, pass in id from router.params... */}
-            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="button" onClick={() => { }}>
+            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" type="button" onClick={() => { router.push(`/todo/edit-todo/${t.id}`); }}>
               Edit Todo
             </button>
           </div>
