@@ -1,8 +1,6 @@
 import argon2 from 'argon2';
 import { getConnection } from 'typeorm';
 import { verify } from 'jsonwebtoken';
-import { sendRefreshToken } from '../utils/sendRefreshToken';
-import { createRefreshToken } from '../utils/createRefreshToken';
 import { createAccessToken } from '../utils/createAccessToken';
 import { User } from '../entities/User';
 import { validateRegister } from '../utils/validateRegister';
@@ -34,7 +32,7 @@ const register = async (req, res) => {
     user = result.raw[0];
     // log user in after succesfull registration
     const token = createAccessToken(user);
-    sendRefreshToken(res, createRefreshToken(user));
+    createAccessToken(user);
     res.status(200).json({ user, token });
   } catch (e) {
     if (e.code === '23505') {
@@ -74,15 +72,13 @@ const login = async (req, res) => {
       ],
     });
   } else {
-  // login is successfull
+    // login is successfull
     const token = createAccessToken(user!);
-    sendRefreshToken(res, createRefreshToken(user!));
     res.status(200).json({ user, token });
   }
 };
 
 const logout = async (req, res) => {
-  sendRefreshToken(res, '');
   res.status(200).json({ token: null, user: null });
 };
 

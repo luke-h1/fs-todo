@@ -3,15 +3,10 @@ import express from 'express';
 import { createConnection } from 'typeorm';
 import { join } from 'path';
 import cors from 'cors';
-import { verify } from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import { __prod__ } from './constants';
 import todoRoutes from './routes/todoRoutes';
 import authRoutes from './routes/authRoutes';
-import { sendRefreshToken } from './utils/sendRefreshToken';
-import { User } from './entities/User';
-import { createAccessToken } from './utils/createAccessToken';
-import { createRefreshToken } from './utils/createRefreshToken';
 
 require('dotenv-safe').config();
 
