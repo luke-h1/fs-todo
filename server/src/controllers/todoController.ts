@@ -1,4 +1,4 @@
-import { createQueryBuilder, getConnection } from 'typeorm';
+import { getConnection } from 'typeorm';
 import { Todo } from '../entities/Todo';
 
 const getTodos = async (req, res) => {
@@ -27,32 +27,6 @@ const getTodo = async (req, res) => {
   res.status(200).json({ todo });
 };
 
-// const getTodo = async (req, res) => {
-//   const todo = await getConnection()
-//     .createQueryBuilder()
-//     .select('todo')
-//     .where('id = :id and "creatorId" = :creatorId', {
-//       id: req.body.id,
-//       creatorId: req.body.userId,
-//     })
-//     .getRawMany();
-
-//   if (todo) {
-//     res.status(200).json({ todo });
-//   }
-// };
-
-// const getTodo = async (req, res) => {
-//   const todo = await Todo.findOne({
-//     where: { id: req.body.id }
-
-//   })
-//   const todo = await Todo.findOne({
-//     where: { creatorId: req.userId },
-//     order: { id: 'DESC' },
-//   });
-//   res.status(200).json({ todo });
-// };
 
 const createTodo = async (req, res) => {
   const todo = await Todo.create({
